@@ -330,6 +330,7 @@
         function startGpsTracking() {
             if (watchId) navigator.geolocation.clearWatch(watchId);
 
+            // タイムアウトを実車・モバイル通信用に大幅に緩和
             watchId = navigator.geolocation.watchPosition(position => {
                 const myPos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
                 
@@ -392,7 +393,9 @@
                     currentRouteSteps.shift();
                 }
 
-            }, error => { console.log("GPS Error: ", error); }, { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 });
+            }, error => { 
+                console.log("GPS Error Code: ", error.code, " Message: ", error.message); 
+            }, { enableHighAccuracy: true, timeout: 27000, maximumAge: 3000 }); // ★ここを実車用にチューニング
         }
 
         function stopAudioLoop() {
